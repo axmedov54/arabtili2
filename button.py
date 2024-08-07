@@ -31,7 +31,7 @@ Aljomiy = ReplyKeyboardMarkup(
 menyu = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="Arab Harflari"), KeyboardButton(text="Arab Harflari O`qilish")],
-        [KeyboardButton(text="Kitoblar"),KeyboardButton(text="Lug`at")],
+        [KeyboardButton(text="Kitoblar")],
     ],
     resize_keyboard=True,
     

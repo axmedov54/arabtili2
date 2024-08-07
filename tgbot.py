@@ -1,11 +1,12 @@
 import asyncio
 import logging
 import sys
-from aiogram import Bot, Dispatcher, html, F
+from aiogram import Bot, Dispatcher, html, F,types
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import Message,KeyboardButton,ReplyKeyboardMarkup
+from aiogram.utils import executor
 import random
 
 
@@ -411,6 +412,127 @@ async def namoz50(message: Message):
 @dp.message(F.text == 'Chiqish <-')
 async def namoz50(message: Message):
     await message.answer(text='Assosiy Menyu', reply_markup=menyu) 
+
+
+lugatlar = [
+    "Ota", "أب", "Ab",
+    "Ona", "أم", "Um",
+    "Aka", "أخ", "Akh",
+    "Opa", "أخت", "Ukht",
+    "Bola", "طفل", "Tifl",
+    "Uy", "بيت", "Bayt",
+    "Maktab", "مدرسة", "Madrasa",
+    "Kitob", "كتاب", "Kitab",
+    "Qalam", "قلم", "Qalam",
+    "Stol", "طاولة", "Tawila",
+    "Stul", "كرسي", "Kursi",
+    "Deraza", "نافذة", "Nafiza",
+    "Eshik", "باب", "Bab",
+    "Yoz", "صيف", "Sayf",
+    "Qish", "شتاء", "Shita'",
+    "Bahor", "ربيع", "Rabi'",
+    "Kuz", "خريف", "Kharif",
+    "Daraxt", "شجرة", "Shajara",
+    "Gull", "زهرة", "Zahra",
+    "Suv", "ماء", "Ma'",
+    "Non", "خبز", "Khobz",
+    "Go'sht", "لحم", "Lahm",
+    "Sut", "حليب", "Halib",
+    "Choy", "شاي", "Shay",
+    "Meva", "فاكهة", "Fakiha",
+    "Sabzavot", "خضروات", "Khudrawat",
+    "Mahalla", "حي", "Hayy",
+    "Shaharcha", "مدينة", "Madina",
+    "Do'st", "صديق", "Sadiq",
+    "Yordam", "مساعدة", "Musa'ada",
+    "Ish", "عمل", "Amal",
+    "Pul", "مال", "Mal",
+    "Sog'liq", "صحة", "Sihha",
+    "Sevgi", "حب", "Hubb",
+    "Oq", "أبيض", "Abyad",
+    "Qora", "أسود", "Aswad",
+    "Qizil", "أحمر", "Ahmar",
+    "Yashil", "أخضر", "Akhzar",
+    "Moviy", "أزرق", "Azraq",
+    "Sariq", "أصفر", "Asfar",
+    "Osmon", "سماء", "Sama'",
+    "Quyosh", "شمس", "Shams",
+    "Oy", "قمر", "Qamar",
+    "Yulduz", "نجم", "Najm",
+    "Mashina", "سيارة", "Sayyara",
+    "Velosiped", "دراجة", "Daraja",
+    "Avtobus", "حافلة", "Hafila",
+    "Poyezd", "قطار", "Qitar",
+    "Samolyot", "طائرة", "Tayara",
+    "Oyoq", "قدم", "Qadam",
+    "Qo'l", "يد", "Yad",
+    "Bosh", "رأس", "Ra's",
+    "Ko'z", "عين", "Ayn",
+    "Quloq", "أذن", "Udhun",
+    "Burun", "أنف", "Anf",
+    "Og'iz", "فم", "Fam",
+    "Yurak", "قلب", "Qalb",
+    "Oshqozon", "معدة", "Mi'da",
+    "Tish", "سن", "Sinn",
+    "Soch", "شعر", "Sha'r",
+    "Tungi", "ليل", "Layl",
+    "Kunduz", "نهار", "Nahar",
+    "Erta", "مبكر", "Mubakir",
+    "Kech", "متأخر", "Muta'akhir",
+    "Havo", "هواء", "Hawa'",
+    "Yomg'ir", "مطر", "Matar",
+    "Qor", "ثلج", "Thalj",
+    "Shamol", "ريح", "Rih",
+    "Tog'", "جبل", "Jabal",
+    "Daryo", "نهر", "Nahr",
+    "Ko'l", "بحيرة", "Buhayra",
+    "Dengiz", "بحر", "Bahr",
+    "Okean", "محيط", "Muhit",
+    "Qo'ng'iroq", "جرس", "Jaras",
+    "Xabar", "رسالة", "Rasala",
+    "Rasm", "صورة", "Sura",
+    "Musiqa", "موسيقى", "Musiqa",
+    "Kino", "فيلم", "Film",
+    "Kitobxona", "مكتبة", "Maktaba",
+    "Muzey", "متحف", "Mathaf",
+    "Stadion", "ملعب", "Mal'ab",
+    "Do'kon", "متجر", "Matjar",
+    "Bozor", "سوق", "Suq",
+    "Tushlik", "غداء", "Ghada",
+    "Kechki ovqat", "عشاء", "Asha",
+    "Nonushta", "إفطار", "Iftar",
+    "Osh", "بيلاف", "Pilaf",
+    "Salat", "سلطة", "Salata",
+    "Sho'rva", "حساء", "Hisau",
+    "Pishloq", "جبن", "Jubn",
+    "Yog'", "زيت", "Zayt",
+    "Shakar", "سكر", "Sukkar",
+    "Tuz", "ملح", "Milh",
+    "Mavzu", "موضوع", "Mawdu'",
+    "Savol", "سؤال", "Su'al",
+    "Javob", "جواب", "Jawab",
+    "To'g'ri", "صحيح", "Sahih",
+    "Noto'g'ri", "خطأ", "Khata'",
+    "Xato", "خطأ", "Khata'",
+    "Yaxshi", "جيد", "Jayid"
+]
+
+# Lug'atlar tugmasi
+button_dictionary = KeyboardButton('Lug`atlar')
+markup = ReplyKeyboardMarkup().add(button_dictionary)
+
+@dp.message_handler(commands=['start'])
+async def send_welcome(message: types.Message):
+    await message.reply("Salom! Tugmani bosing:", reply_markup=markup)
+
+@dp.message_handler(lambda message: message.text == 'Lug`atlar')
+async def send_random_dictionaries(message: types.Message):
+    # Tasodifiy 20 ta lug'atni tanlash
+    random_dictionaries = random.sample(lugatlar, 20)
+   # Tanlangan lug'atlarni formatlash va jo'natish
+    response = "\n".join(random_dictionaries)
+    await message.reply(response)
+ 
 
 async def main() -> None:
     await dp.start_polling(bot)
